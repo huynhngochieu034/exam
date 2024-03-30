@@ -4,7 +4,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import com.example.exam.dto.UserDTO;
+import com.example.exam.dto.user.UserDTO;
 import com.example.exam.entity.UserEntity;
 
 @Component
@@ -21,5 +21,9 @@ public class UserConverter {
 	public UserEntity convertToEntity(UserDTO userDTO) {
 		UserEntity result = modelMapper.map(userDTO, UserEntity.class);
 		return result;
+	}
+	
+	public void partialUpdate(UserDTO userDTO, UserEntity entity) {
+		modelMapper.map(userDTO, entity);
 	}
 }

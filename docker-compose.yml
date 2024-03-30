@@ -8,9 +8,11 @@ services:
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=123456
-      - POSTGRES_DB=postgres
+      - POSTGRES_DB=exam
     ports:
       - '5432:5432'
+    volumes: 
+      - db:/var/lib/postgresql/data
 
   app:
     container_name: exam
@@ -20,9 +22,23 @@ services:
     ports:
       - '8080:8080'
     environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://psql-db:5432/postgres
+      - SPRING_APPLICATION_NAME=exam
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://psql-db:5432/exam
       - SPRING_DATASOURCE_USERNAME=postgres
       - SPRING_DATASOURCE_PASSWORD=123456
-      - SPRING_JPA_HIBERNATE_DDL_AUTO=update
+      - SPRING_DATASOURCE_DRIVERCLASSNAME=org.postgresql.Driver
+      - SPRING_JPA_HIBERNATE_DDLAUTO=create-drop
+      - SPRING_JPA_HIBERNATE_DIALECT=org.hibernate.dialect.PostgreSQLDialect
+      - SPRING_JPA_SHOW_SQL=true
+      - SPRING_JPA_HIBERNATE_FORMAT_SQL=true
+      - SPRING_JPA_PROPERTIES_HIBERNATE_JDBC_TIME_ZONE=UTC
+      - JWT_SECRET=9a4f2c8d3b7a1e6f45c8a0b3f267d8b1d4e6f3c8a9d2b5f8e3a9c8b5f6v8a3d9
+      - JWT_EXPIRATION=3600000000
+      - INIT_USER_EMAIL=teacher@example.com
+      - INIT_USER_PASSWORD=12345678
     depends_on:
       - psql-db
+
+volumes:
+  db:
+    driver: local

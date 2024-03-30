@@ -1,31 +1,27 @@
 package com.example.exam.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.exam.dto.LoginRequestDTO;
-import com.example.exam.dto.RegisterRequestDTO;
-import com.example.exam.dto.UserDTO;
+import com.example.exam.dto.login.LoginRequestDTO;
+import com.example.exam.dto.login.LoginResponseDTO;
 import com.example.exam.service.impl.AuthenticationService;
+import com.example.exam.utils.CustomResponse;
 
 @RestController
 @RequestMapping("/api/v1/auth")
-public class AuthenticationController {
+public class AuthenticationController extends AbstractController {
 
 	@Autowired
 	private AuthenticationService authenticationService;
 
-	@PostMapping("/register")
-	public ResponseEntity<UserDTO> register(@RequestBody RegisterRequestDTO request) {
-		return ResponseEntity.ok(authenticationService.register(request));
-	}
-
 	@PostMapping("/login")
-	public ResponseEntity<UserDTO> authenticate(@RequestBody LoginRequestDTO request) {
-		return ResponseEntity.ok(authenticationService.authenticate(request));
+	public ResponseEntity<CustomResponse<LoginResponseDTO>> authenticate(@RequestBody LoginRequestDTO request) {
+		return generateResponse(authenticationService.authenticate(request), HttpStatus.OK);
 	}
 }
